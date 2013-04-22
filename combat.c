@@ -1,4 +1,8 @@
 //funciones de combate
+//sudo apt-get install libncurses5-dev libncursesw5-dev
+//opciones de construccion:
+//compile:	gcc -Wall -o "%e" "%f" -lm -lncurses
+//build:	gcc -Wall -o "%e" "%f" -lncurses
 #include <stdio.h>
 #include <time.h>
 #include "statsglobals.h"
