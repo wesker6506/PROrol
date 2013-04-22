@@ -7,7 +7,7 @@ void calculPenalitador();
 void calculGuarit();
 
 int eleccioEnemicManual();//eleccio manual
-int eleccioEnemicRand(char *monstrescollit);//retorna la id de enemic
+int eleccioEnemicRand(int jugadorEscollit);//retorna la id de enemic
 
 int ronda();//calcula com es desenvolupa la ronda
 //int ronda(int estrPJ, int estrEN)					   //y retorna el resultat d'aquest.
