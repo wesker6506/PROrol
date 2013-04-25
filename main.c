@@ -8,7 +8,9 @@
 #include "GUI.h"
 #include "modificador.h"
 //#include "modificador.h"
-
+//sudo apt-get install libncurses5-dev libncursesw5-dev
+//per construir cambiar la instruccio afegint la seguent opcio
+//build:  -lncurses
 
 int main(){
 	
