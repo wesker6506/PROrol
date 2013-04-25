@@ -1,16 +1,14 @@
 //funciones de combate
-//sudo apt-get install libncurses5-dev libncursesw5-dev
-//opciones de construccion:
-//compile:	gcc -Wall -o "%e" "%f" -lm -lncurses
-//build:	gcc -Wall -o "%e" "%f" -lncurses
 #include <stdio.h>
 #include <time.h>
-#include "statsglobals.h"
 #include <stdbool.h>
 #include <string.h>
 #include <ncurses.h>
+#include "GUI.h"
+#include "statsglobals.h"
 
 FILE *fich;
+
 
 int calculGrauExit(estrEN, estrPJ){ //Calcula el grau d'èxit de cada atac prenent com a referencia les estrategies del jugador i l'enemic
 									//Retorna el grau d'èxit
@@ -28,6 +26,7 @@ int calculGrauExit(estrEN, estrPJ){ //Calcula el grau d'èxit de cada atac prene
 	int randEfecte,grauExit = 0,i;
 	int monedes;
 	
+	
 	if( (estrEN == 1) || (estrEN == 3) )
 		monedes = temporal[0].atac ; 
 	if( (estrEN == 2) || (estrEN == 4) )
@@ -39,6 +38,7 @@ int calculGrauExit(estrEN, estrPJ){ //Calcula el grau d'èxit de cada atac prene
 		monedes = jugador[0].defensa;
 	
 	for ( i = 0 ; i <= monedes ; i ++ ){
+		//srand((unsigned)time(NULL) );
 		randEfecte = rand()%2;
 		if(randEfecte == 1){
 			grauExit ++;
@@ -67,37 +67,7 @@ int estrategiaEnemic(){  //Generacio aleatorio de la estrategia del enemic
 	return estrEN;
 }
 
-void printEstrEN(estrEN){ //Printat de les estrategies del enemic
 
-//Estrategies: Atac 1 , Defensa 2 , Engany 3 , Maniobra 4
-
-switch(estrEN){
-	case 1:
-		mvprintw(11,0,"| L'enemic ataca!                ");
-		mvprintw(12,0,"|                                           ");	
-		refresh(); getch();
-	break;
-	
-	case 2:
-		mvprintw(11,0,"| L'enemic s'ha defensat..       ");	
-		mvprintw(12,0,"|                                            ");
-		refresh(); getch();
-	break;
-	
-	case 3:
-		mvprintw(11,0,"| L'enemic t'intenta enganyar ~~       ");	
-		mvprintw(12,0,"|                                             ");
-		refresh(); getch();
-	break;
-	
-	case 4:
-		mvprintw(11,0,"| L'enemic realitza una maniobra innesperada!     ");
-		mvprintw(12,0,"|                                              ");
-		refresh(); getch();
-	break;
-}
-	
-}
 
 int ronda(int estrPJ, int estrEN){ //Calcul del resultat de cada ronda, depenent de la estrategia del juegador i del enemic(random)
 									//Retorna el resultat de cada ronda	
@@ -238,66 +208,6 @@ int eleccioEnemicRand(int jugadorEscollit){ //S'escull un enemic aleatori en fun
  return enemicEscollit;
 }
 
-void printResultat(int resultatRonda){ //Funció que interpreta el resultat de cada ronda i en fa un print, el parametre es una 
-										//variable pont per printar el resultat de cada ronda
-	
-	//Resultats jugador:   Danyat 1, Guarit 2, Penalitzat 3, Jug: Danyat x2 4,
-    //Resultats enemic:    Danyat 11, Guarit 22, Penalitzat 33, Adv: Danyat x2 44,
-    //Resultats combinats: Jug i Adv: Danyat 111, Jug i Adv: Guarit 222, Jug i Adv: Penalitzat 333
-	
-	switch(resultatRonda){
-			//Resultats jugador:
-			case 1:
-				mvprintw(11,0,"| Jugador danyat                             ");break;
-				mvprintw(12,0,"| 	 										");
-				refresh(); getch();	
-			case 2:
-				mvprintw(11,0,"| Jugador guarit                               ");break;
-				mvprintw(12,0,"| 	 										");
-				refresh(); getch();	
-			case 3:
-				mvprintw(11,0,"| Jugador penalitzat                           ");break;
-				mvprintw(12,0,"| 	 										");
-				refresh(); getch();	
-			case 4: 
-				mvprintw(11,0,"| Jugador danyat x2                            ");break;
-				mvprintw(12,0,"| 	 										");
-				refresh(); getch();	
-				
-			//Resultats enemic:
-			case 11:
-				mvprintw(11,0,"| Enemic danyat                                ");break;
-				mvprintw(12,0,"| 	 										");
-				refresh(); getch();	
-			case 22: 
-				mvprintw(11,0,"| Enemic guarit                                ");break;
-				mvprintw(12,0,"| 	 										");
-				refresh(); getch();	
-			case 33: 
-				mvprintw(11,0,"| Enemic penalitzat                            ");break;
-				mvprintw(12,0,"| 	 										");
-				refresh(); getch();	
-			case 44:
-				mvprintw(11,0,"| Enemic danyat x2                             ");break;
-				mvprintw(12,0,"| 	 										");
-				refresh(); getch();	
-			//Resultats combinats:
-			case 111:
-				mvprintw(11,0,"| Jugador i enemic danyats                     ");break;
-				mvprintw(12,0,"| 	 										");
-				refresh(); getch();	
-			case 222:
-				mvprintw(11,0,"| Jugador i adversari guarits                  ");break;
-				mvprintw(12,0,"| 	 										");
-				refresh(); getch();	
-			case 333: 
-				mvprintw(11,0,"| Jugador i adversari Penalitzats                    ");break;
-				mvprintw(12,0,"| 	 										");
-				refresh(); getch();	
-	}
-	
-}
-
 void modificadorStatFinalRonda(int grauExit, int resultatRonda){ //Aquesta funció modificarà la struct temporal amb els stats del enemic i la struc del jugador,
 																  //en funció del grau d'èxit i del resultat de la ronda.
 
@@ -382,171 +292,24 @@ switch(resultatRonda){
 	
 }
 
+
+/*
 void ficheroPJ(){ //Funció que encara cal implementar, permetrà guardar la partida i continuarla a partir del començament d'una batalla
 
- fich = fopen("personaje1.txt", "a+"); /*crear fichero con el nombre del personaje 1,2,3*/
+ fich = fopen("personaje1.txt", "a+"); crear fichero con el nombre del personaje 1,2,3
  fprintf(fich,"%d,%d,%d,%d,%d,%d,%d",jugador[0].punts,jugador[0].pVida,jugador[0].pVidaMax,jugador[0].atac,jugador[0].pAtacMax,jugador[0].defensa,jugador[0].pDefMax);
  
 
 }
+
 
 void leerFicheroPJ(){ //Leemos el fichero personajeX.X y lo copiamos en la posicion X de la struct jugador
 	
 	
 
 }
+*/
 
-void copiarStructEnemicTemporal(int enemic){ //Copiamos la struct del enemigo elegido en nuestra struct temporal
-											  
-	
- strcpy(temporal[0].nom,enemics[enemic].nom);
-		temporal[0].nivell   = enemics[enemic].nivell;
-		temporal[0].punts    = enemics[enemic].punts;
-		temporal[0].pVida    = enemics[enemic].pVida ;
-		temporal[0].pVidaMax = enemics[enemic].pVidaMax;
-		temporal[0].atac     = enemics[enemic].atac;
-		temporal[0].pAtacMax = enemics[enemic].pAtacMax;
-		temporal[0].defensa  = enemics[enemic].defensa;
-		temporal[0].pDefMax  = enemics[enemic].pDefMax;
-}
-
-void cuadroBase(){ //Función que dibuja el cuadrado base
-
-	//Printado del cuadro base	
-	mvprintw(0,0, "+----------------------------------------------------+\n");
-	mvprintw(1,0, "|                                                    |\n");
-	mvprintw(2,0, "|                                                    |\n");
-	mvprintw(3,0, "|                                                    |\n");
-	mvprintw(4,0, "|                                                    |\n");
-	mvprintw(5,0, "|                                                    |\n");
-	mvprintw(6,0, "|                                                    |\n");
-	mvprintw(7,0, "|                                                    |\n");
-	mvprintw(8,0, "|                                                    |\n");
-	mvprintw(9,0, "|                                                    |\n");
-	mvprintw(10,0,"+----------------------------------------------------+\n");
-	refresh();
-
-}
-
-int main(){
-	
-	bool endCombat = false;
-	int rondaS = 1, choose, initFix = 1,estrPJ,estrEN,enemicEscollit,iniciRonda = 1,resultatRonda,grauExit,initAnim = 1;
-	//int initAnim = 1;
-	
-	initscr(); //Inicializamos la ventana en modo ncurses;
-    //La estructura básica de ncurses se basa en el uso del modulo: <sentencias a ejecutar> getch();refresh(); 
-    
-   //El juego se compone de 10 rondas con sus correspondientes combates, en los cuales el jugador deberá dejar la salud del enemigo a 0
-	while(rondaS < 11){
-
-		while (endCombat != true){
-			
-			//Printado del cuadro base	
-			cuadroBase();
-			
-			while(initAnim == 1){
-			mvprintw(1,1,"Aquest es un joc de rol creat per");
-			mvprintw(2,1,"Justin Rios i Victor Collado");
-			mvprintw(3,1,"Les normes son sencilles, hauràs de lluitar ");
-			mvprintw(4,1,"en 10 combats tot escribint el nom d'un enemic");
-			mvprintw(5,1,"al començament de cadascun d'aquests, si falles");
-			mvprintw(6,1,"un enemic aleatori del teu poder apareixerà.");
-			mvprintw(7,1,"Seràs capaç d'arribar fins al final?");
-			
-			refresh(); getch();
-			cuadroBase();
-			
-			mvprintw(1,1,"QUE COMENCI LA BATALLA!!");
-			refresh(); getch();
-			initAnim = 0;
-			}
-			cuadroBase();
-			
-			if(initFix == 1){ //Arreglo para el marco izquierdo al iniciar el programa
-				mvprintw(12,0,"|                                                    |");
-				initFix = 0;
-			}
-			
-			enemicEscollit = eleccioEnemicManual();
-			if( (enemicEscollit > 0) && (enemicEscollit <= 10) )
-			iniciRonda = 1;
-			
-			if (enemicEscollit == -1){
-				enemicEscollit = eleccioEnemicRand(jugador[0].nivell);
-				iniciRonda = 1;
-			}
-			
-			copiarStructEnemicTemporal(enemicEscollit);
-			
-			while(iniciRonda == 1)  {
-				//printat dels estats del monstre per pantalla
-				mvprintw(1,1," Combat %d/10",rondaS);
-				
-				//mvprintw(1,21,"%s",); 
-				mvprintw(1,21,"%s LVL %d Vida:%d / %d  ",enemics[enemicEscollit].nom,temporal[0].nivell,temporal[0].pVida,temporal[0].pVidaMax);
-				
-				mvprintw(9,21,"LVL:%d Vida:%d / %d ",jugador[0].nivell, jugador[0].pVida, jugador[0].pVidaMax);
-				
-				move(11,29);
-				refresh(); getch(); 
-				
-				mvprintw(12,0,"| 1.Atacar|2.Defensa|3.Engany|4.Maniobra|   ");
-				mvprintw(11,0,"| Que vols fer?                                ");
-				mvscanw(11,16,"%d", &estrPJ);
-				refresh();
-				estrEN = estrategiaEnemic();
-				printEstrEN(estrEN);
-				resultatRonda = ronda(estrPJ,estrEN);
-				grauExit = calculGrauExit(estrEN,estrPJ);
-				
-				
-				/*mvprintw(11,0,"| Resultats del combat:              ");
-				mvprintw(12,0,"| EstrEN: %d, res ronda: %d GExit: %d         ",estrEN, resultatRonda, grauExit);
-				getch();*/ //Este getch debe ser quitado, ya que muestra información de tiempo de ejecución, solo se usará para controlar los 
-						 //valores parametrizados
-				refresh();
-				
-				modificadorStatFinalRonda(grauExit,resultatRonda);
-				choose = 1;
-				printResultat(resultatRonda);
-				
-				/*!arreglo de estilo*/
-				if(choose == 1)
-					mvprintw(12,0,"|                                                    |");
-				
-				if(temporal[0].pVida <= 0){
-					if(temporal[0].pVida < 0)//Fix per a mostrar 0 quan l'enemic es derrotat
-						temporal[0].pVida = 0;
-					mvprintw(1,21,"%s LVL %d Vida:%d / %d  ",enemics[enemicEscollit].nom,temporal[0].nivell,temporal[0].pVida,temporal[0].pVidaMax);
-					mvprintw(12,0,"| Has guanyat el combat! ");
-					getch(); refresh();
-					iniciRonda = 0;
-					//Añadir funcion que gestiona los puntos de experiencia
-				}	
-				
-				if(jugador[0].pVida <= 0){ //condicion para cuando el jugador se quede sin puntos de vida
-					
-					mvprintw(12,0,"| Has mort,           ");
-					mvprintw(11,0,"| Fi de la partida                 ");
-					getch();
-					refresh();
-					iniciRonda = 0;
-					endCombat = true;
-				}
-			}
-			//Ronda ++ implica empezar otro combate
-			rondaS++;
-			cuadroBase();
-			endwin();
-			if(rondaS == 11){
-				endCombat = true;
-				return 0;
-			}
-		}
-}
-return 0;
-}
 
 /*
 Comentarios sobre añadidos: 

@@ -12,7 +12,8 @@
 	nivell-1=1250{kobold=250 ,manticora=400}
 	*/
 
-int modificadorExperiencia(int resultat , int idEnemic,int idJugador ){//retorna 1 si s'ha pujat de lvl 0 si no -1 si error
+int modificadorExperiencia(int idEnemic,int idJugador ){	//FunciÃ³ que modifica la experiencia i fa pujar el nivell
+															//retorna 1 si s'ha pujat de lvl 0 si no -1 si error
 	int expActual;
 	int nivellActu;
 	const int n1=1250;
