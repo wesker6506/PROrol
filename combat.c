@@ -77,6 +77,14 @@ int ronda(int estrPJ, int estrEN){ //Calcul del resultat de cada ronda, depenent
  //Resultats jugador:   Danyat 1, Guarit 2, Penalitzat 3, Jug: Danyat x2 4,
  //Resultats enemic:    Danyat 11, Guarit 22, Penalitzat 33, Adv: Danyat x2 44,
  //Resultats combinats: Jug i Adv: Danyat 111, Jug i Adv: Guarit 222, Jug i Adv: Penalitzat 333                  
+ 
+ srand((unsigned)time(NULL) );
+ 
+ //Fix per a estrategia aleatoria "tecla Enter"
+ if(estrPJ > 4)
+  estrPJ = rand()%4;
+ if(estrPJ == 0)
+  estrPJ + 1;
     
  switch(estrPJ){
                     
